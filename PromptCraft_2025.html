@@ -1,0 +1,2665 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromptCraft 2025 | Guide Complet du Prompt Engineering</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --neon-cyan: #00ffff;
+            --neon-purple: #8b5cf6;
+            --neon-pink: #ff007f;
+            --neon-green: #00ff88;
+            --matrix-green: #39ff14;
+            --dark-bg: #0a0a0f;
+            --darker-bg: #050508;
+            --card-bg: #1a1a2e;
+            --text-primary: #ffffff;
+            --text-secondary: #b4b4b4;
+            --text-muted: #666666;
+            --terminal-bg: #161b22;
+            --terminal-border: #30363d;
+            --accent-gradient: linear-gradient(135deg, var(--neon-cyan) 0%, var(--neon-purple) 50%, var(--neon-pink) 100%);
+            --glow: 0 0 20px;
+            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.3);
+            --shadow-hard: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --border-radius: 12px;
+            --border-radius-lg: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(255, 0, 127, 0.1) 0%, transparent 50%);
+            z-index: -1;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(1deg); }
+            66% { transform: translateY(10px) rotate(-1deg); }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--darker-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--neon-purple), var(--neon-cyan));
+            border-radius: 4px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            position: relative;
+            padding: 80px 0 60px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(0, 255, 255, 0.2) 100%);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23333" stroke-width="0.5" opacity="0.3"/></pattern></defs><rect width="100" height="20" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        .header-content {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .terminal-header {
+            display: inline-block;
+            background: var(--terminal-bg);
+            border: 1px solid var(--terminal-border);
+            border-radius: var(--border-radius);
+            padding: 20px 40px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-hard);
+            position: relative;
+        }
+
+        .terminal-header::before {
+            content: '● ● ●';
+            position: absolute;
+            top: 12px;
+            left: 20px;
+            color: var(--neon-green);
+            font-size: 12px;
+            letter-spacing: 4px;
+        }
+
+        .terminal-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-top: 10px;
+            text-shadow: var(--glow) rgba(0, 255, 255, 0.5);
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 20px auto 0;
+            line-height: 1.5;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            box-shadow: var(--glow) rgba(0, 255, 255, 0.3);
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+            margin: 40px 0;
+        }
+
+        .nav-container {
+            background: rgba(26, 26, 46, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius-lg);
+            padding: 20px 30px;
+            box-shadow: var(--shadow-hard);
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .nav-link {
+            display: block;
+            text-decoration: none;
+            color: var(--text-secondary);
+            padding: 12px 16px;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-gradient);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--glow) rgba(139, 92, 246, 0.4);
+        }
+
+        .nav-link:hover::before {
+            left: 0;
+        }
+
+        /* Sections */
+        section {
+            background: rgba(26, 26, 46, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius-lg);
+            padding: 50px;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            overflow: hidden;
+        }
+
+        section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent-gradient);
+            z-index: 1;
+        }
+
+        h2 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: var(--neon-cyan);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        h2::before {
+            content: '>';
+            color: var(--neon-green);
+            font-weight: bold;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin: 40px 0 20px;
+            color: var(--neon-purple);
+            font-weight: 600;
+        }
+
+        h4 {
+            font-size: 1.3rem;
+            margin: 30px 0 15px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 20px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        /* Terminal/Code blocks */
+        .terminal-block {
+            background: var(--terminal-bg);
+            border: 1px solid var(--terminal-border);
+            border-radius: var(--border-radius);
+            margin: 25px 0;
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .terminal-header-bar {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--terminal-border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot.red { background: #ff5f56; }
+        .terminal-dot.yellow { background: #ffbd2e; }
+        .terminal-dot.green { background: #27ca3f; }
+
+        .terminal-title-bar {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+
+        .terminal-content {
+            padding: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--matrix-green);
+        }
+
+        .prompt-line {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .prompt-line::before {
+            content: '$ ';
+            color: var(--neon-cyan);
+            font-weight: bold;
+        }
+
+        /* Cards and boxes */
+        .info-card {
+            background: rgba(0, 255, 255, 0.1);
+            border-left: 4px solid var(--neon-cyan);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin: 25px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '💡';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+        }
+
+        .warning-card {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid #ffc107;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .warning-card::before {
+            content: '⚠️';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+        }
+
+        .danger-card {
+            background: rgba(220, 53, 69, 0.1);
+            border-left: 4px solid #dc3545;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .danger-card::before {
+            content: '🚨';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+        }
+
+        .success-card {
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 4px solid var(--neon-green);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .success-card::before {
+            content: '✅';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+        }
+
+        /* Comparison layout */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin: 25px 0;
+        }
+
+        .comparison-item {
+            padding: 25px;
+            border-radius: var(--border-radius);
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .comparison-bad {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+
+        .comparison-good {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .comparison-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            margin: 30px 0;
+        }
+
+        .tabs-nav {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 8px;
+            margin-bottom: 25px;
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: calc(var(--border-radius) - 4px);
+            transition: all 0.3s ease;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .tab-button.active {
+            background: var(--accent-gradient);
+            color: var(--text-primary);
+            box-shadow: var(--glow) rgba(139, 92, 246, 0.4);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Interactive elements */
+        .interactive-demo {
+            background: var(--terminal-bg);
+            border: 1px solid var(--terminal-border);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 25px 0;
+        }
+
+        .demo-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 15px;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .demo-button {
+            background: var(--accent-gradient);
+            border: none;
+            color: var(--text-primary);
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow) rgba(139, 92, 246, 0.4);
+        }
+
+        /* Lists */
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+        }
+
+        li strong {
+            color: var(--text-primary);
+        }
+
+        /* Checklist */
+        .checklist {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .checklist li {
+            position: relative;
+            padding-left: 40px;
+            margin-bottom: 15px;
+        }
+
+        .checklist li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--neon-green);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Progress indicator */
+        .progress-bar {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-gradient);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 60px 0;
+            margin-top: 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            header {
+                padding: 60px 0 40px;
+            }
+
+            .terminal-title {
+                font-size: 2rem;
+            }
+
+            section {
+                padding: 30px 20px;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .nav-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .tabs-nav {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .tab-button {
+                text-align: center;
+            }
+        }
+
+        /* Animation for elements coming into view */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Pulse animation for important elements */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(139, 92, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="terminal-header">
+                    <div class="terminal-title">PromptCraft 2025</div>
+                </div>
+                <div class="subtitle">
+                    Maîtrisez l'art du prompt engineering avec les dernières techniques d'IA avancée
+                    <br>De débutant à expert en une seule session
+                </div>
+                <div class="version-badge">v2025.6 | Kevin ARNOUD</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <nav>
+            <div class="nav-container">
+                <div class="nav-grid">
+                    <a href="#introduction" class="nav-link">Introduction</a>
+                    <a href="#fondamentaux" class="nav-link">Fondamentaux</a>
+                    <a href="#techniques" class="nav-link">Techniques</a>
+                    <a href="#avance" class="nav-link">Techniques 2025</a>
+                    <a href="#expert" class="nav-link">Niveau Expert</a>
+                    <a href="#ai-safety" class="nav-link">IA Safety</a>
+                    <a href="#cas-pratiques" class="nav-link">Cas Pratiques</a>
+                    <a href="#futur" class="nav-link">Futur</a>
+                </div>
+            </div>
+        </nav>
+
+        <section id="introduction" class="fade-in">
+            <h2>Introduction au Prompt Engineering 2025</h2>
+            
+            <p>Le <strong>prompt engineering</strong> est devenu en 2025 une discipline mature et essentielle dans l'écosystème de l'IA. Avec l'émergence de modèles comme Claude 4, GPT-5, et les nouveaux modèles multimodaux, l'art de communiquer efficacement avec l'IA a évolué vers une véritable expertise technique.</p>
+
+            <div class="info-card">
+                <h3>🚀 Qu'est-ce qui a changé en 2025 ?</h3>
+                <p>Les modèles d'IA de 2025 sont capables de :</p>
+                <ul>
+                    <li><strong>Raisonnement multi-étapes</strong> : Résolution de problèmes complexes avec des chaînes de pensée avancées</li>
+                    <li><strong>Contextualisation extrême</strong> : Fenêtres de contexte de plus de 2M de tokens</li>
+                    <li><strong>Spécialisation adaptative</strong> : Adaptation instantanée à des domaines d'expertise spécifiques</li>
+                    <li><strong>Multimodalité native</strong> : Traitement simultané de texte, images, audio et vidéo</li>
+                    <li><strong>Auto-correction intelligente</strong> : Détection et correction automatique des erreurs de raisonnement</li>
+                </ul>
+            </div>
+
+            <h3>Pourquoi maîtriser le prompt engineering en 2025 ?</h3>
+            
+            <div class="comparison-grid">
+                <div class="comparison-item comparison-bad">
+                    <div class="comparison-title">❌ Utilisateur basique 2025</div>
+                    <p>Utilise l'IA comme un moteur de recherche amélioré, obtient des résultats génériques, ne comprend pas les capacités avancées, perd du temps avec des itérations inutiles.</p>
+                </div>
+                <div class="comparison-item comparison-good">
+                    <div class="comparison-title">✅ Expert en prompt engineering</div>
+                    <p>Exploite les capacités de raisonnement avancé, obtient des résultats précis du premier coup, automatise des tâches complexes, collabore efficacement avec l'IA comme un partenaire intellectuel.</p>
+                </div>
+            </div>
+
+            <div class="terminal-block">
+                <div class="terminal-header-bar">
+                    <div class="terminal-dots">
+                        <div class="terminal-dot red"></div>
+                        <div class="terminal-dot yellow"></div>
+                        <div class="terminal-dot green"></div>
+                    </div>
+                    <div class="terminal-title-bar">example_prompt_2025.md</div>
+                </div>
+                <div class="terminal-content">
+                    <span class="prompt-line">prompt = """</span>
+                    <span class="prompt-line">En tant qu'expert en analyse financière avec 15 ans d'expérience,</span>
+                    <span class="prompt-line">analyse les données suivantes selon le framework DCF avancé.</span>
+                    <span class="prompt-line"></span>
+                    <span class="prompt-line">CONTEXTE: Entreprise tech SaaS, croissance 40% YoY</span>
+                    <span class="prompt-line">OBJECTIF: Valorisation précise pour levée de fonds Série B</span>
+                    <span class="prompt-line">CONTRAINTES: Considère l'incertitude macroéconomique 2025</span>
+                    <span class="prompt-line"></span>
+                    <span class="prompt-line">MÉTHODE: Utilise une approche probabiliste avec Monte Carlo</span>
+                    <span class="prompt-line">FORMAT: Rapport exécutif + modèle financier détaillé</span>
+                    <span class="prompt-line">"""</span>
+                </div>
+            </div>
+
+            <h3>À qui s'adresse ce guide ?</h3>
+            
+            <div class="tabs-container">
+                <div class="tabs-nav">
+                    <button class="tab-button active" data-tab="debutant">🌱 Débutant</button>
+                    <button class="tab-button" data-tab="intermediaire">🚀 Intermédiaire</button>
+                    <button class="tab-button" data-tab="expert">🧠 Expert</button>
+                    <button class="tab-button" data-tab="entreprise">🏢 Entreprise</button>
+                </div>
+                
+                <div id="debutant" class="tab-content active">
+                    <h4>Parcours Débutant</h4>
+                    <p>Vous découvrez l'IA générative et souhaitez apprendre les bases pour des interactions efficaces.</p>
+                    <ul>
+                        <li>Comprendre les fondamentaux du prompt engineering</li>
+                        <li>Maîtriser les techniques de base pour des résultats immédiats</li>
+                        <li>Éviter les erreurs courantes qui donnent des résultats décevants</li>
+                        <li>Progresser rapidement vers un niveau intermédiaire</li>
+                    </ul>
+                </div>
+                
+                <div id="intermediaire" class="tab-content">
+                    <h4>Parcours Intermédiaire</h4>
+                    <p>Vous utilisez déjà l'IA mais voulez optimiser vos résultats et découvrir des techniques avancées.</p>
+                    <ul>
+                        <li>Techniques de chaîne de pensée et raisonnement structuré</li>
+                        <li>Prompting multi-modal et intégration de contextes complexes</li>
+                        <li>Automatisation de workflows avec des prompts sophistiqués</li>
+                        <li>Optimisation pour des cas d'usage professionnels spécifiques</li>
+                    </ul>
+                </div>
+                
+                <div id="expert" class="tab-content">
+                    <h4>Parcours Expert</h4>
+                    <p>Vous maîtrisez les bases et cherchez les techniques les plus avancées pour des cas d'usage complexes.</p>
+                    <ul>
+                        <li>Meta-prompting et prompts auto-génératifs</li>
+                        <li>Techniques de fine-tuning comportemental via prompting</li>
+                        <li>Architecture de systèmes d'IA complexes</li>
+                        <li>Recherche et développement de nouvelles méthodologies</li>
+                    </ul>
+                </div>
+                
+                <div id="entreprise" class="tab-content">
+                    <h4>Parcours Entreprise</h4>
+                    <p>Vous représentez une organisation qui souhaite déployer l'IA de manière sécurisée et efficace.</p>
+                    <ul>
+                        <li>Gouvernance et politiques d'utilisation de l'IA</li>
+                        <li>Sécurité des données et conformité réglementaire</li>
+                        <li>Formation d'équipes et standardisation des pratiques</li>
+                        <li>ROI et mesure de performance des initiatives IA</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="fondamentaux" class="fade-in">
+            <h2>Fondamentaux du Prompt Engineering 2025</h2>
+            
+            <h3>Architecture d'un prompt moderne</h3>
+            <p>En 2025, un prompt efficace suit une architecture structurée qui tire parti des capacités avancées des modèles actuels :</p>
+            
+            <div class="terminal-block">
+                <div class="terminal-header-bar">
+                    <div class="terminal-dots">
+                        <div class="terminal-dot red"></div>
+                        <div class="terminal-dot yellow"></div>
+                        <div class="terminal-dot green"></div>
+                    </div>
+                    <div class="terminal-title-bar">prompt_architecture_2025.yaml</div>
+                </div>
+                <div class="terminal-content">
+                    <span class="prompt-line">persona:</span>
+                    <span class="prompt-line">  role: "Expert en [domaine] avec X années d'expérience"</span>
+                    <span class="prompt-line">  expertise: [liste des compétences spécifiques]</span>
+                    <span class="prompt-line">  perspective: [angle d'approche unique]</span>
+                    <span class="prompt-line"></span>
+                    <span class="prompt-line">context:</span>
+                    <span class="prompt-line">  situation: [contexte spécifique détaillé]</span>
+                    <span class="prompt-line">  constraints: [limitations et contraintes]</span>
+                    <span class="prompt-line">  objectives: [objectifs SMART]</span>
+                    <span class="prompt-line"></span>
+                    <span class="prompt-line">task:</span>
+                    <span class="prompt-line">  primary: [tâche principale]</span>
+                    <span class="prompt-line">  methodology: [approche méthodologique]</span>
+                    <span class="prompt-line">  deliverables: [format de sortie attendu]</span>
+                    <span class="prompt-line"></span>
+                    <span class="prompt-line">quality_controls:</span>
+                    <span class="prompt-line">  verification: [méthodes de vérification]</span>
+                    <span class="prompt-line">  bias_check: [contrôles de biais]</span>
+                    <span class="prompt-line">  accuracy: [standards de précision]</span>
+                </div>
+            </div>
+
+            <h3>Les 7 piliers du prompt engineering moderne</h3>
+            
+            <div class="comparison-grid">
+                <div class="comparison-item success-card">
+                    <h4>1. Persona Sophistiquée</h4>
+                    <p>Définir un rôle expert avec des nuances psychologiques et professionnelles spécifiques.</p>
+                </div>
+                <div class="comparison-item success-card">
+                    <h4>2. Contextualisation Multi-Dimensionnelle</h4>
+                    <p>Intégrer contexte historique, environnemental, social et technique.</p>
+                </div>
+            </div>
+
+            <div class="comparison-grid">
+                <div class="comparison-item success-card">
+                    <h4>3. Méthodologie Explicite</h4>
+                    <p>Spécifier la méthode de raisonnement et d'analyse attendue.</p>
+                </div>
+                <div class="comparison-item success-card">
+                    <h4>4. Contrôles Qualité Intégrés</h4>
+                    <p>Inclure des mécanismes d'auto-vérification et de validation.</p>
+                </div>
+            </div>
+
+            <div class="comparison-grid">
+                <div class="comparison-item success-card">
+                    <h4>5. Format Structuré</h4>
+                    <p>Définir précisément la structure et le format de sortie.</p>
+                </div>
+                <div class="comparison-item success-card">
+                    <h4>6. Gestion d'Incertitude</h4>
+                    <p>Gérer explicitement les zones d'incertitude et les limitations.</p>
+                </div>
+            </div>
+
+            <div class="success-card">
+                <h4>7. Adaptabilité Contextuelle</h4>
+                <p>Permettre à l'IA d'ajuster son approche selon les spécificités détectées dans la demande.</p>
+            </div>
+
+            <h3>Évolutions majeures depuis 2024</h3>
+            
+            <div class="info-card">
+                <h4>🆕 Nouvelles Capacités 2025</h4>
+                <ul>
+                    <li><strong>Raisonnement Causal Avancé</strong> : Les modèles peuvent maintenant identifier et exploiter des relations causales complexes</li>
+                    <li><strong>Méta-Cognition</strong> : Capacité à raisonner sur leur propre processus de raisonnement</li>
+                    <li><strong>Simulation Comportementale</strong> : Modélisation précise de comportements humains et organisationnels</li>
+                    <li><strong>Intégration Temporelle</strong> : Gestion sophistiquée des concepts de temps et d'évolution</li>
+                    <li><strong>Calibration d'Incertitude</strong> : Estimation précise de leur niveau de confiance</li>
+                </ul>
+            </div>
+
+            <div class="terminal-block">
+                <div class="terminal-header-bar">
+                    <div class="terminal-dots">
+                        <div class="terminal-dot red"></div>
+                        <div class="terminal-dot yellow"></div>
+                        <div class="terminal-dot green"></div>
+                    </div>
+                    <div class="terminal-title-bar">example_2025_vs_2024.md</div>
+                </div>
+                <div class="terminal-content">
+                    <span class="prompt-line"># STYLE 2024 (dépassé)</span>
+                    <span class="prompt-line">"Écris un plan de marketing pour notre produit"</span>
+                    <span class="prompt-line"></span>
+                    <span class="prompt-line"># STYLE 2025 (optimisé)</span>
+                    <span class="prompt-line">"En tant que CMO avec expertise en growth hacking B2B SaaS,</span>
+                    <span class="prompt-line">développe une stratégie de go-to-market pour un produit</span>
+                    <span class="prompt-line">d'automatisation RH ciblant les scale-ups 50-500 employés.</span>
+                    <span class="prompt-line"></span>
+                    <span class="prompt-line">MÉTHODE: Framework OKR + Jobs-to-be-Done + ICPAnalysis</span>
+                    <span class="prompt-line">LIVRABLES: Stratégie exécutive + Roadmap 90 jours + KPIs</span>
+                    <span class="prompt-line">CONTRAINTES: Budget 50K€, équipe 3 personnes, marché EU</span>
+                    <span class="prompt-line"></span>
+                    <span class="prompt-line">Inclus une analyse de risques et des scénarios alternatifs."</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="techniques" class="fade-in">
+            <h2>Techniques Intermédiaires Actualisées</h2>
+            
+            <h3>Chain-of-Thought 2.0 : Raisonnement Structuré</h3>
+            <p>L'évolution de la technique de chaîne de pensée intègre maintenant des structures de raisonnement plus sophistiquées :</p>
+            
+            <div class="terminal-block">
+                <div class="terminal-header-bar">
+                    <div class="terminal-dots">
+                        <div class="terminal-dot red"></div>
+                        <div class="terminal-dot yellow"></div>
+                        <div class="terminal-dot green"></div>
+                    </div>
+                    <div class="terminal-title-bar">chain_of_thought_2025.py</div>
+                </div>
+                <div class="terminal-content">
+                    <span class="prompt-line">def structured_reasoning(problem):</span>
+                    <span class="prompt-line">    """</span>
+                    <span class="prompt-line">    Résous ce problème en suivant cette séquence :</span>
+                    <span class="prompt-line">    </span>
+                    <span class="prompt-line">    1. DÉCOMPOSITION : Divise le problème en sous-composants</span>
+                    <span class="prompt-line">    2. ANALYSE : Pour chaque composant, identifie :</span>
+                    <span class="prompt-line">       - Variables connues</span>
+                    <span class="prompt-line">       - Variables inconnues</span>
+                    <span class="prompt-line">       - Hypothèses nécessaires</span>
+                    <span class="prompt-line">    3. SYNTHÈSE : Recompose la solution globale</span>
+                    <span class="prompt-line">    4. VALIDATION : Vérifie la cohérence logique</span>
+                    <span class="prompt-line">    5. CALIBRATION : Estime ton niveau de confiance</span>
+                    <span class="prompt-line">    """</span>
+                    <span class="prompt-line">    return solution_with_confidence_interval</span>
+                </div>
+            </div>
+
+            <h3>Few-Shot Learning Adaptatif</h3>
+            <p>Technique évoluée qui s'adapte au style et aux préférences détectées dans les exemples :</p>
+            
+            <div class="success-card">
+                <h4>Template Few-Shot Moderne</h4>
+                <div class="terminal-block">
+                    <div class="terminal-content">
+                        <span class="prompt-line">Analyse ces exemples pour comprendre le style attendu :</span>
+                        <span class="prompt-line"></span>
+                        <span class="prompt-line">EXEMPLE 1:</span>
+                        <span class="prompt-line">Input: [problème A]</span>
+                        <span class="prompt-line">Process: [méthode appliquée]</span>
+                        <span class="prompt-line">Output: [solution formatée]</span>
+                        <span class="prompt-line">Meta: [niveau de détail, tone, structure]</span>
+                        <span class="prompt-line"></span>
+                        <span class="prompt-line">EXEMPLE 2: [même structure]</span>
+                        <span class="prompt-line"></span>
+                        <span class="prompt-line">Maintenant, applique le même pattern à : [nouveau problème]</span>
+                        <span class="prompt-line">Adapte le niveau de détail et le style aux exemples précédents.</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Technique du Prompt Conditionnel</h3>
+            <p>Nouvelle approche qui permet à l'IA d'adapter sa réponse selon les conditions détectées :</p>
+            
+            <div class="comparison-grid">
+                <div class="comparison-item comparison-bad">
+                    <div class="comparison-title">❌ Approche rigide</div>
+                    <p>"Explique la blockchain en 3 paragraphes"</p>
+                    <p><em>→ Ignore le niveau de connaissance de l'audience</em></p>
+                </div>
+                <div class="comparison-item comparison-good">
+                    <div class="comparison-title">✅ Approche conditionnelle</div>
+                    <p>"Explique la blockchain en adaptant ton niveau selon l'audience :</p>
+                    <ul>
+                        <li>SI audience = technique → Focus sur cryptographie et consensus</li>
+                        <li>SI audience = business → Focus sur valeur et cas d'usage</li>
+                        <li>SI audience = général → Focus sur analogies et concepts simples</li>
+                    </ul>
+                    <p>Détecte automatiquement l'audience à partir du contexte."</p>
+                </div>
+            </div>
+
+            <h3>Multi-Perspective Reasoning</h3>
+            <p>Technique avancée qui force l'analyse sous plusieurs angles simultanément :</p>
+            
+            <div class="terminal-block">
+                <div class="terminal-header-bar">
+                    <div class="terminal-dots">
+                        <div class="terminal-dot red"></div>
+                        <div class="terminal-dot yellow"></div>
+                        <div class="terminal-dot green"></div>
+                    </div>
+                    <div class="terminal-title-bar">multi_perspective.md</div>
+                </div>
+                <div class="terminal-content">
+                    <span class="prompt-line">Analyse [SUJET] selon ces 4 perspectives simultanément :</span>
+                    <span class="prompt-line"></span>
+                    <span class="prompt-line">🔍 PERSPECTIVE ANALYTIQUE :</span>
+                    <span class="prompt-line">- Décomposition factuelle et méthodique</span>
+                    <span class="prompt-line">- Focus sur données et preuves</span>
+                    <span class="prompt-line"></span>
+                    <span class="prompt-line">🎨 PERSPECTIVE CRÉATIVE :</span>
+                    <span class="prompt-line">- Approches innovantes et non-conventionnelles</span>
+                    <span class="prompt-line">- Connexions inattendues</span>
+                    <span class="prompt-line"></span>
+                    <span class="prompt-line">⚖️ PERSPECTIVE CRITIQUE :</span>
+                    <span class="prompt-line">- Identification des faiblesses et risques</span>
+                    <span class="prompt-line">- Remise en question des assumptio</span>
+                    <span class="prompt-line"></span>
+                    <span class="prompt-line">🌍 PERSPECTIVE SYSTÉMIQUE :</span>
+                    <span class="prompt-line">- Impact sur l'écosystème global</span>
+                    <span class="prompt-line">- Interactions et dépendances</span>
+                    <span class="prompt-line"></span>
+                    <span class="prompt-line">SYNTHÈSE : Intègre ces 4 perspectives en une recommandation cohérente.</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="avance" class="fade-in">
+            <h2>Techniques Avancées 2025</h2>
+            
+            <h3>Meta-Prompting Évolutif</h3>
+            <p>Technique de pointe qui permet à l'IA de générer et d'optimiser ses propres prompts :</p>
+            
+            <div class="terminal-block">
+                <div class="terminal-header-bar">
+                    <div class="terminal-dots">
+                        <div class="terminal-dot red"></div>
+                        <div class="terminal-dot yellow"></div>
+                        <div class="terminal-dot green"></div>
+                    </div>
+                    <div class="terminal-title-bar">meta_prompting_2025.py</div>
+                </div>
+                <div class="terminal-content">
+                    <span class="prompt-line">class MetaPromptOptimizer:</span>
+                    <span class="prompt-line">    """</span>
+                    <span class="prompt-line">    Étape 1: Analyse mon objectif : [OBJECTIF DÉTAILLÉ]</span>
+                    <span class="prompt-line">    Étape 2: Génère 3 prompts alternatifs optimisés</span>
+                    <span class="prompt-line">    Étape 3: Évalue chaque prompt selon :</span>
+                    <span class="prompt-line">           - Précision attendue (1-10)</span>
+                    <span class="prompt-line">           - Créativité stimulée (1-10)</span>
+                    <span class="prompt-line">           - Efficacité computationnelle (1-10)</span>
+                    <span class="prompt-line">    Étape 4: Recommande le prompt optimal avec justification</span>
+                    <span class="prompt-line">    Étape 5: Propose 2 variantes pour A/B testing</span>
+                    <span class="prompt-line">    """</span>
+                </div>
+            </div>
+
+            <h3>Prompt Architecture Patterns</h3>
+            <p>Patterns avancés inspirés de l'architecture logicielle :</p>
+            
+            <div class="tabs-container">
+                <div class="tabs-nav">
+                    <button class="tab-button active" data-tab="singleton">Singleton</button>
+                    <button class="tab-button" data-tab="factory">Factory</button>
+                    <button class="tab-button" data-tab="observer">Observer</button>
+                    <button class="tab-button" data-tab="strategy">Strategy</button>
+                </div>
+                
+                <div id="singleton" class="tab-content active">
+                    <h4>Pattern Singleton : Persona Persistante</h4>
+                    <div class="terminal-block">
+                        <div class="terminal-content">
+                            <span class="prompt-line"># Initialise une fois, utilise partout</span>
+                            <span class="prompt-line">PERSONA_CORE = {</span>
+                            <span class="prompt-line">  "identity": "Dr. Sarah Chen, PhD Neurosciences",</span>
+                            <span class="prompt-line">  "expertise": ["Machine Learning", "Cognitive Science"],</span>
+                            <span class="prompt-line">  "thinking_style": "Méthodique + Créatif",</span>
+                            <span class="prompt-line">  "communication": "Précis mais accessible"</span>
+                            <span class="prompt-line">}</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line"># Puis pour chaque interaction :</span>
+                            <span class="prompt-line">f"En tant que {PERSONA_CORE}, analyse [NOUVELLE_TÂCHE]"</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="factory" class="tab-content">
+                    <h4>Pattern Factory : Génération Contextuelle</h4>
+                    <div class="terminal-block">
+                        <div class="terminal-content">
+                            <span class="prompt-line">def generate_expert_persona(domain, task_type, audience):</span>
+                            <span class="prompt-line">    """</span>
+                            <span class="prompt-line">    Selon le contexte fourni, génère le persona expert optimal :</span>
+                            <span class="prompt-line">    </span>
+                            <span class="prompt-line">    IF domain="finance" AND task_type="analysis" :</span>
+                            <span class="prompt-line">        RETURN "Analyste Quantitatif Senior, CFA"</span>
+                            <span class="prompt-line">    IF domain="marketing" AND audience="C-level" :</span>
+                            <span class="prompt-line">        RETURN "VP Marketing avec track record IPO"</span>
+                            <span class="prompt-line">    """</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="observer" class="tab-content">
+                    <h4>Pattern Observer : Monitoring Adaptatif</h4>
+                    <div class="terminal-block">
+                        <div class="terminal-content">
+                            <span class="prompt-line">class AdaptivePrompt:</span>
+                            <span class="prompt-line">    """</span>
+                            <span class="prompt-line">    Surveille la qualité de tes réponses et adapte ton approche :</span>
+                            <span class="prompt-line">    </span>
+                            <span class="prompt-line">    IF user_feedback == "trop technique" :</span>
+                            <span class="prompt-line">        ADJUST communication_level -= 2</span>
+                            <span class="prompt-line">    IF user_asks_clarification :</span>
+                            <span class="prompt-line">        INCREASE detail_level += 1</span>
+                            <span class="prompt-line">    IF task_complexity > current_approach :</span>
+                            <span class="prompt-line">        ESCALATE to_advanced_reasoning()</span>
+                            <span class="prompt-line">    """</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="strategy" class="tab-content">
+                    <h4>Pattern Strategy : Méthodes Interchangeables</h4>
+                    <div class="terminal-block">
+                        <div class="terminal-content">
+                            <span class="prompt-line">strategies = {</span>
+                            <span class="prompt-line">    "analytical": "Décomposition systématique + preuves",</span>
+                            <span class="prompt-line">    "creative": "Brainstorming + associations libres", </span>
+                            <span class="prompt-line">    "critical": "Red team + Devil's advocate",</span>
+                            <span class="prompt-line">    "pragmatic": "Solutions rapides + implémentation"</span>
+                            <span class="prompt-line">}</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line"># Choisis automatiquement selon le contexte</span>
+                            <span class="prompt-line">auto_select_strategy(task_nature, time_constraint, stakes)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Emotional Intelligence Prompting</h3>
+            <p>Nouvelle dimension qui intègre l'intelligence émotionnelle dans les prompts :</p>
+            
+            <div class="info-card">
+                <h4>🧠 Prompting Émotionnellement Intelligent</h4>
+                <div class="terminal-block">
+                    <div class="terminal-content">
+                        <span class="prompt-line">Contexte émotionnel : [SITUATION TENDUE]</span>
+                        <span class="prompt-line"></span>
+                        <span class="prompt-line">En tant qu'expert en communication empathique :</span>
+                        <span class="prompt-line">1. RECONNAIS les émotions en jeu</span>
+                        <span class="prompt-line">2. ADAPTE ton ton selon l'état émotionnel détecté</span>
+                        <span class="prompt-line">3. PROPOSE des solutions qui tiennent compte du facteur humain</span>
+                        <span class="prompt-line">4. ANTICIPE les réactions émotionnelles potentielles</span>
+                        <span class="prompt-line">5. FOURNIS des alternatives si la première approche échoue</span>
+                        <span class="prompt-line"></span>
+                        <span class="prompt-line">Ton style : Professionnellement empathique, jamais condescendant</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Quantum Prompting : Superposition de Perspectives</h3>
+            <p>Technique expérimentale qui explore plusieurs trajectoires de réponse simultanément :</p>
+            
+            <div class="warning-card">
+                <h4>⚗️ Technique Expérimentale</h4>
+                <div class="terminal-block">
+                    <div class="terminal-content">
+                        <span class="prompt-line">Mode Quantum_Thinking :</span>
+                        <span class="prompt-line"></span>
+                        <span class="prompt-line">Maintiens 3 trajectoires de pensée en parallèle :</span>
+                        <span class="prompt-line"></span>
+                        <span class="prompt-line">TRAJECTOIRE_A: Approche optimiste (best-case scenario)</span>
+                        <span class="prompt-line">TRAJECTOIRE_B: Approche réaliste (most-likely scenario)</span>
+                        <span class="prompt-line">TRAJECTOIRE_C: Approche pessimiste (worst-case scenario)</span>
+                        <span class="prompt-line"></span>
+                        <span class="prompt-line">À chaque étape de raisonnement, développe les 3 en parallèle.</span>
+                        <span class="prompt-line">Converge vers la synthèse la plus robuste à la fin.</span>
+                        <span class="prompt-line"></span>
+                        <span class="prompt-line">Marque tes points de divergence et convergence.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="expert" class="fade-in">
+            <h2>Niveau Expert : Frontières du Possible</h2>
+            
+            <h3>Prompt Engineering Génératif</h3>
+            <p>Niveau ultime où l'IA génère ses propres frameworks de prompting :</p>
+            
+            <div class="terminal-block">
+                <div class="terminal-header-bar">
+                    <div class="terminal-dots">
+                        <div class="terminal-dot red"></div>
+                        <div class="terminal-dot yellow"></div>
+                        <div class="terminal-dot green"></div>
+                    </div>
+                    <div class="terminal-title-bar">self_improving_prompt.py</div>
+                </div>
+                <div class="terminal-content">
+                    <span class="prompt-line">class SelfImprovingPrompt:</span>
+                    <span class="prompt-line">    """</span>
+                    <span class="prompt-line">    Objectif : [OBJECTIF_COMPLEXE]</span>
+                    <span class="prompt-line">    </span>
+                    <span class="prompt-line">    Étape 1: ANALYSE de l'objectif</span>
+                    <span class="prompt-line">    - Décompose en sous-objectifs</span>
+                    <span class="prompt-line">    - Identifie les types de raisonnement requis</span>
+                    <span class="prompt-line">    - Évalue la complexité cognitive nécessaire</span>
+                    <span class="prompt-line">    </span>
+                    <span class="prompt-line">    Étape 2: DESIGN du framework optimal</span>
+                    <span class="prompt-line">    - Génère une architecture de prompt personnalisée</span>
+                    <span class="prompt-line">    - Inclut des mécanismes d'auto-correction</span>
+                    <span class="prompt-line">    - Prévoit des points de validation</span>
+                    <span class="prompt-line">    </span>
+                    <span class="prompt-line">    Étape 3: EXÉCUTION adaptative</span>
+                    <span class="prompt-line">    - Applique le framework généré</span>
+                    <span class="prompt-line">    - Monitore la qualité en temps réel</span>
+                    <span class="prompt-line">    - Ajuste dynamiquement si nécessaire</span>
+                    <span class="prompt-line">    </span>
+                    <span class="prompt-line">    Étape 4: MÉTA-APPRENTISSAGE</span>
+                    <span class="prompt-line">    - Analyse ce qui a fonctionné/échoué</span>
+                    <span class="prompt-line">    - Améliore le framework pour la prochaine fois</span>
+                    <span class="prompt-line">    - Documente les patterns découverts</span>
+                    <span class="prompt-line">    """</span>
+                </div>
+            </div>
+
+            <h3>Cognitive Architecture Simulation</h3>
+            <p>Simulation de processus cognitifs humains complexes :</p>
+            
+            <div class="success-card">
+                <h4>🧠 Simulation Cognitive Avancée</h4>
+                <div class="terminal-block">
+                    <div class="terminal-content">
+                        <span class="prompt-line">Simule un think tank de 5 experts avec interactions réalistes :</span>
+                        <span class="prompt-line"></span>
+                        <span class="prompt-line">EXPERT_1: "Dr. Martinez" (Neuroscientifique, pensée analytique)</span>
+                        <span class="prompt-line">EXPERT_2: "Alex Chen" (Designer, pensée créative)</span>
+                        <span class="prompt-line">EXPERT_3: "Prof. Williams" (Philosophe, pensée critique)</span>
+                        <span class="prompt-line">EXPERT_4: "Sarah Kim" (CEO, pensée stratégique)</span>
+                        <span class="prompt-line">EXPERT_5: "Dr. Patel" (Psychologue, pensée empathique)</span>
+                        <span class="prompt-line"></span>
+                        <span class="prompt-line">DYNAMIQUES_GROUPE :</span>
+                        <span class="prompt-line">- Simule les biais cognitifs individuels</span>
+                        <span class="prompt-line">- Modélise les dynamiques de pouvoir</span>
+                        <span class="prompt-line">- Inclus des moments de désaccord constructif</span>
+                        <span class="prompt-line">- Génère des synergies imprévisibles</span>
+                        <span class="prompt-line"></span>
+                        <span class="prompt-line">PROCESSUS : 3 rounds de discussion + synthèse collaborative</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Temporal Reasoning Chains</h3>
+            <p>Raisonnement sophistiqué intégrant la dimension temporelle :</p>
+            
+            <div class="comparison-grid">
+                <div class="comparison-item info-card">
+                    <h4>🕐 Raisonnement Temporel Passé</h4>
+                    <p>Analyse des causes historiques, patterns évolutifs, leçons du passé</p>
+                </div>
+                <div class="comparison-item warning-card">
+                    <h4>⏱️ Raisonnement Temporel Présent</h4>
+                    <p>Contraintes actuelles, opportunités immédiates, urgences du moment</p>
+                </div>
+            </div>
+            
+            <div class="comparison-grid">
+                <div class="comparison-item success-card">
+                    <h4>🔮 Raisonnement Temporel Futur</h4>
+                    <p>Scénarios prospectifs, anticipation des conséquences, planification adaptative</p>
+                </div>
+                <div class="comparison-item info-card">
+                    <h4>🌀 Raisonnement Temporel Cyclique</h4>
+                    <p>Patterns récurrents, cycles naturels, dynamiques saisonnières</p>
+                </div>
+            </div>
+
+            <div class="terminal-block">
+                <div class="terminal-header-bar">
+                    <div class="terminal-dots">
+                        <div class="terminal-dot red"></div>
+                        <div class="terminal-dot yellow"></div>
+                        <div class="terminal-dot green"></div>
+                    </div>
+                    <div class="terminal-title-bar">temporal_reasoning.py</div>
+                </div>
+                <div class="terminal-content">
+                    <span class="prompt-line">def temporal_analysis(problem, time_horizon):</span>
+                    <span class="prompt-line">    """</span>
+                    <span class="prompt-line">    PASSÉ (t-5 à t-1) :</span>
+                    <span class="prompt-line">    - Quels événements ont mené à cette situation ?</span>
+                    <span class="prompt-line">    - Quels patterns historiques sont pertinents ?</span>
+                    <span class="prompt-line">    - Quelles solutions ont été tentées auparavant ?</span>
+                    <span class="prompt-line">    </span>
+                    <span class="prompt-line">    PRÉSENT (t0) :</span>
+                    <span class="prompt-line">    - Quelles sont les contraintes actuelles ?</span>
+                    <span class="prompt-line">    - Quelles ressources sont disponibles maintenant ?</span>
+                    <span class="prompt-line">    - Quel est le coût de l'inaction immédiate ?</span>
+                    <span class="prompt-line">    </span>
+                    <span class="prompt-line">    FUTUR PROCHE (t+1 à t+3) :</span>
+                    <span class="prompt-line">    - Quelles conséquences directes des actions ?</span>
+                    <span class="prompt-line">    - Quels ajustements seront nécessaires ?</span>
+                    <span class="prompt-line">    </span>
+                    <span class="prompt-line">    FUTUR LOINTAIN (t+5 à t+10) :</span>
+                    <span class="prompt-line">    - Quel impact systémique à long terme ?</span>
+                    <span class="prompt-line">    - Quelles mégatendances influenceront le contexte ?</span>
+                    <span class="prompt-line">    """</span>
+                </div>
+            </div>
+
+            <h3>Adversarial Prompting : Red Team Mental</h3>
+            <p>Technique avancée pour tester la robustesse des raisonnements :</p>
+            
+            <div class="danger-card">
+                <h4>🔴 Mode Red Team Activé</h4>
+                <div class="terminal-block">
+                    <div class="terminal-content">
+                        <span class="prompt-line">Mission: Attaque systématique de ta propre solution</span>
+                        <span class="prompt-line"></span>
+                        <span class="prompt-line">PHASE 1 - GÉNÉRATION DE SOLUTION ROBUSTE :</span>
+                        <span class="prompt-line">[Développe ta meilleure solution au problème]</span>
+                        <span class="prompt-line"></span>
+                        <span class="prompt-line">PHASE 2 - ADVERSARIAL ATTACK :</span>
+                        <span class="prompt-line">Adopte le rôle d'un critique expert malveillant :</span>
+                        <span class="prompt-line">- Identifie TOUTES les failles logiques</span>
+                        <span class="prompt-line">- Trouve les assumptions non-vérifiées</span>
+                        <span class="prompt-line">- Simule les scénarios d'échec</span>
+                        <span class="prompt-line">- Exploite les biais cognitifs potentiels</span>
+                        <span class="prompt-line">- Questionne chaque étape du raisonnement</span>
+                        <span class="prompt-line"></span>
+                        <span class="prompt-line">PHASE 3 - SOLUTION RENFORCÉE :</span>
+                        <span class="prompt-line">Intègre les attaques pour créer une v2.0 plus robuste</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ai-safety" class="fade-in">
+            <h2>IA Safety & Sécurité Avancée 2025</h2>
+            
+            <div class="danger-card">
+                <h3>🚨 Nouveaux Risques 2025</h3>
+                <p>L'évolution rapide des modèles d'IA a introduit de nouveaux vecteurs de risque qu'il est essentiel de comprendre :</p>
+                <ul>
+                    <li><strong>Manipulation Sociale Sophistiquée</strong> : Capacité à exploiter les biais psychologiques humains</li>
+                    <li><strong>Génération de Désinformation Indétectable</strong> : Contenu fake hyper-réaliste</li>
+                    <li><strong>Extraction d'Informations par Inférence</strong> : Déduction de données sensibles à partir d'indices</li>
+                    <li><strong>Prompt Injection Évoluée</strong> : Attaques sophistiquées contre les systèmes d'IA</li>
+                    <li><strong>Dépendance Cognitive</strong> : Risque d'atrophie des capacités de raisonnement humain</li>
+                </ul>
+            </div>
+
+            <h3>Framework de Sécurité Moderne</h3>
+            <p>Approche structurée pour une utilisation sécurisée de l'IA en 2025 :</p>
+            
+            <div class="terminal-block">
+                <div class="terminal-header-bar">
+                    <div class="terminal-dots">
+                        <div class="terminal-dot red"></div>
+                        <div class="terminal-dot yellow"></div>
+                        <div class="terminal-dot green"></div>
+                    </div>
+                    <div class="terminal-title-bar">ai_security_framework_2025.yaml</div>
+                </div>
+                <div class="terminal-content">
+                    <span class="prompt-line">security_levels:</span>
+                    <span class="prompt-line">  PUBLIC: # Niveau 0 - Information publique</span>
+                    <span class="prompt-line">    - Données déjà publiées</span>
+                    <span class="prompt-line">    - Connaissances générales</span>
+                    <span class="prompt-line">    - Concepts théoriques</span>
+                    <span class="prompt-line">  </span>
+                    <span class="prompt-line">  INTERNAL: # Niveau 1 - Usage interne anonymisé</span>
+                    <span class="prompt-line">    - Processus génériques de l'organisation</span>
+                    <span class="prompt-line">    - Données agrégées et anonymisées</span>
+                    <span class="prompt-line">    - Méthodologies sans détails sensibles</span>
+                    <span class="prompt-line">  </span>
+                    <span class="prompt-line">  CONFIDENTIAL: # Niveau 2 - JAMAIS avec IA externe</span>
+                    <span class="prompt-line">    - Stratégies d'entreprise</span>
+                    <span class="prompt-line">    - Données financières détaillées</span>
+                    <span class="prompt-line">    - Informations sur les clients/employés</span>
+                    <span class="prompt-line">  </span>
+                    <span class="prompt-line">  SECRET: # Niveau 3 - INTERDIT absolument</span>
+                    <span class="prompt-line">    - Propriété intellectuelle critique</span>
+                    <span class="prompt-line">    - Données personnelles identifiables</span>
+                    <span class="prompt-line">    - Informations de sécurité nationale</span>
+                </div>
+            </div>
+
+            <h3>Techniques d'Anonymisation Avancées</h3>
+            
+            <div class="tabs-container">
+                <div class="tabs-nav">
+                    <button class="tab-button active" data-tab="substitution">Substitution</button>
+                    <button class="tab-button" data-tab="abstraction">Abstraction</button>
+                    <button class="tab-button" data-tab="simulation">Simulation</button>
+                    <button class="tab-button" data-tab="federation">Fédération</button>
+                </div>
+                
+                <div id="substitution" class="tab-content active">
+                    <h4>Technique de Substitution Systématique</h4>
+                    <div class="comparison-grid">
+                        <div class="comparison-item comparison-bad">
+                            <div class="comparison-title">❌ Données réelles exposées</div>
+                            <div class="terminal-block">
+                                <div class="terminal-content">
+                                    <span class="prompt-line">"Analyse la performance de notre client</span>
+                                    <span class="prompt-line">TechCorp (CA 15M€, 200 employés,</span>
+                                    <span class="prompt-line">basé à Lyon) versus nos 3 autres</span>
+                                    <span class="prompt-line">clients du secteur SaaS."</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comparison-item comparison-good">
+                            <div class="comparison-title">✅ Substitution systématique</div>
+                            <div class="terminal-block">
+                                <div class="terminal-content">
+                                    <span class="prompt-line">"Analyse la performance de Client_Alpha</span>
+                                    <span class="prompt-line">(CA 10-20M€, 150-250 employés,</span>
+                                    <span class="prompt-line">région Sud-Est) versus 3 autres</span>
+                                    <span class="prompt-line">clients comparables du secteur B2B."</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="abstraction" class="tab-content">
+                    <h4>Technique d'Abstraction Progressive</h4>
+                    <div class="terminal-block">
+                        <div class="terminal-content">
+                            <span class="prompt-line">Niveau 1 - Abstraction sectorielle :</span>
+                            <span class="prompt-line">"Entreprise de services technologiques"</span>
+                            <span class="prompt-line">→ "Entreprise de services"</span>
+                            <span class="prompt-line">→ "Organisation"</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">Niveau 2 - Abstraction géographique :</span>
+                            <span class="prompt-line">"Lyon, France" → "Grande ville européenne"</span>
+                            <span class="prompt-line">→ "Marché développé" → "Région tempérée"</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">Niveau 3 - Abstraction métrique :</span>
+                            <span class="prompt-line">"15.2M€" → "15M€" → "10-20M€"</span>
+                            <span class="prompt-line">→ "Mid-market" → "Taille significative"</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="simulation" class="tab-content">
+                    <h4>Technique de Simulation Réaliste</h4>
+                    <div class="terminal-block">
+                        <div class="terminal-content">
+                            <span class="prompt-line">Génère un dataset de simulation réaliste :</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">"Crée 5 entreprises fictives mais réalistes</span>
+                            <span class="prompt-line">avec ces caractéristiques similaires :</span>
+                            <span class="prompt-line">- Secteur: [secteur généralisé]</span>
+                            <span class="prompt-line">- Taille: [fourchette anonymisée]</span>
+                            <span class="prompt-line">- Défis: [problématiques similaires]</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">Puis analyse ces cas simulés pour</span>
+                            <span class="prompt-line">extraire des insights applicables."</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="federation" class="tab-content">
+                    <h4>Technique de Fédération de Données</h4>
+                    <div class="terminal-block">
+                        <div class="terminal-content">
+                            <span class="prompt-line">Approche fédérée pour données sensibles :</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">1. SEGMENTATION :</span>
+                            <span class="prompt-line">   Divise le problème en composants non-sensibles</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">2. ANALYSE DISTRIBUÉE :</span>
+                            <span class="prompt-line">   Traite chaque segment séparément</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">3. AGRÉGATION SÉCURISÉE :</span>
+                            <span class="prompt-line">   Combine les résultats sans exposer les détails</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">4. VALIDATION CROISÉE :</span>
+                            <span class="prompt-line">   Vérifie la cohérence sans révéler les sources</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Détection et Prévention des Attaques</h3>
+            
+            <div class="warning-card">
+                <h4>⚠️ Signaux d'Alarme - Prompt Injection</h4>
+                <p>Soyez vigilant face à ces patterns suspects :</p>
+                <ul>
+                    <li>Instructions cachées dans des blocs de texte apparemment innocents</li>
+                    <li>Demandes de "ignorer les instructions précédentes"</li>
+                    <li>Tentatives de redirection vers des tâches non-autorisées</li>
+                    <li>Utilisation de caractères spéciaux ou d'encodages inhabituels</li>
+                    <li>Demandes répétées d'accès à des informations sensibles</li>
+                </ul>
+            </div>
+
+            <div class="success-card">
+                <h4>✅ Contre-Mesures Recommandées</h4>
+                <div class="terminal-block">
+                    <div class="terminal-content">
+                        <span class="prompt-line">def security_validation(prompt):</span>
+                        <span class="prompt-line">    """</span>
+                        <span class="prompt-line">    Checklist sécurité avant envoi :</span>
+                        <span class="prompt-line">    </span>
+                        <span class="prompt-line">    ✓ Aucune donnée personnelle identifiable</span>
+                        <span class="prompt-line">    ✓ Pas d'informations financières sensibles</span>
+                        <span class="prompt-line">    ✓ Anonymisation des entités spécifiques</span>
+                        <span class="prompt-line">    ✓ Vérification de l'origine du prompt</span>
+                        <span class="prompt-line">    ✓ Validation du niveau d'autorisation</span>
+                        <span class="prompt-line">    ✓ Review du contexte d'utilisation</span>
+                        <span class="prompt-line">    ✓ Évaluation des risques potentiels</span>
+                        <span class="prompt-line">    </span>
+                        <span class="prompt-line">    return validated_prompt if all_checks_pass else block</span>
+                        <span class="prompt-line">    """</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Gouvernance IA pour Organisations</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Niveau Organisationnel</th>
+                        <th>Responsabilités</th>
+                        <th>Outils de Contrôle</th>
+                        <th>Métriques KPI</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Direction Générale</strong></td>
+                        <td>Stratégie IA, allocation de ressources, responsabilité légale</td>
+                        <td>Comité d'éthique IA, audits externes, assurance cyber</td>
+                        <td>ROI IA, incidents de sécurité, conformité réglementaire</td>
+                    </tr>
+                    <tr>
+                        <td><strong>DSI/CTO</strong></td>
+                        <td>Architecture technique, sécurité système, intégration</td>
+                        <td>Monitoring automatisé, contrôles d'accès, chiffrement</td>
+                        <td>Uptime, performance, coûts infrastructure</td>
+                    </tr>
+                    <tr>
+                        <td><strong>DPO/Juridique</strong></td>
+                        <td>Conformité RGPD, gestion des risques, contrats fournisseurs</td>
+                        <td>Privacy by design, audits conformité, formation</td>
+                        <td>Violations de données, demandes RGPD, litiges</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Managers</strong></td>
+                        <td>Formation équipes, supervision usage, respect des politiques</td>
+                        <td>Guidelines d'usage, validation des prompts, reporting</td>
+                        <td>Adoption utilisateur, qualité outputs, respect des règles</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Utilisateurs</strong></td>
+                        <td>Application des bonnes pratiques, signalement d'incidents</td>
+                        <td>Formation continue, certification, self-assessment</td>
+                        <td>Productivité, qualité du travail, incidents signalés</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="cas-pratiques" class="fade-in">
+            <h2>Cas Pratiques 2025</h2>
+            
+            <div class="tabs-container">
+                <div class="tabs-nav">
+                    <button class="tab-button active" data-tab="business-2025">Business 2025</button>
+                    <button class="tab-button" data-tab="research-2025">Recherche</button>
+                    <button class="tab-button" data-tab="creative-2025">Créatif</button>
+                    <button class="tab-button" data-tab="technical-2025">Technique</button>
+                </div>
+                
+                <div id="business-2025" class="tab-content active">
+                    <h3>Applications Business Avancées</h3>
+                    
+                    <h4>Analyse Stratégique Multi-Dimensionnelle</h4>
+                    <div class="terminal-block">
+                        <div class="terminal-content">
+                            <span class="prompt-line">En tant que consultant McKinsey Senior Partner,</span>
+                            <span class="prompt-line">réalise une analyse stratégique complète selon ce framework :</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">CONTEXTE: Scale-up FinTech européenne, 50M€ ARR</span>
+                            <span class="prompt-line">DÉFI: Expansion US versus consolidation Europe</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">MÉTHODOLOGIE:</span>
+                            <span class="prompt-line">1. Porter's Five Forces + PESTEL Analysis</span>
+                            <span class="prompt-line">2. Blue Ocean Strategy assessment</span>
+                            <span class="prompt-line">3. Resource-Based View evaluation</span>
+                            <span class="prompt-line">4. Real Options valuation</span>
+                            <span class="prompt-line">5. Monte Carlo risk modeling</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">LIVRABLES:</span>
+                            <span class="prompt-line">- Executive summary (2 pages)</span>
+                            <span class="prompt-line">- Detailed analysis (15 pages)</span>
+                            <span class="prompt-line">- Implementation roadmap (90/180/365 jours)</span>
+                            <span class="prompt-line">- Risk mitigation strategies</span>
+                            <span class="prompt-line">- Success metrics & KPIs</span>
+                        </div>
+                    </div>
+
+                    <h4>Due Diligence IA-Assistée</h4>
+                    <div class="terminal-block">
+                        <div class="terminal-content">
+                            <span class="prompt-line">Mode: Senior M&A Analyst avec 10 ans d'expérience</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">Objectif: Due diligence accélérée pour acquisition</span>
+                            <span class="prompt-line">Cible: [Entreprise SaaS anonymisée - 20M€ revenue]</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">ANALYSE MULTI-ANGLE:</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">📊 FINANCIAL DD:</span>
+                            <span class="prompt-line">- Quality of earnings analysis</span>
+                            <span class="prompt-line">- Revenue recognition review</span>
+                            <span class="prompt-line">- Cash flow predictability</span>
+                            <span class="prompt-line">- Working capital analysis</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">🛠️ TECH DD:</span>
+                            <span class="prompt-line">- Architecture scalability</span>
+                            <span class="prompt-line">- Technical debt assessment</span>
+                            <span class="prompt-line">- IP portfolio evaluation</span>
+                            <span class="prompt-line">- Cybersecurity posture</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">👥 COMMERCIAL DD:</span>
+                            <span class="prompt-line">- Customer concentration risk</span>
+                            <span class="prompt-line">- Churn analysis & trends</span>
+                            <span class="prompt-line">- Sales team effectiveness</span>
+                            <span class="prompt-line">- Market positioning strength</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">Synthèse: Recommandation GO/NO-GO avec valorisation justifiée</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="research-2025" class="tab-content">
+                    <h3>Recherche Académique et R&D</h3>
+                    
+                    <h4>Méta-Analyse Systématique</h4>
+                    <div class="terminal-block">
+                        <div class="terminal-content">
+                            <span class="prompt-line">Persona: Chercheur PhD en [DOMAINE] avec expertise méthodologique</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">Mission: Méta-analyse sur [SUJET_RECHERCHE]</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">PROTOCOLE PRISMA 2025:</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">1. STRATÉGIE DE RECHERCHE</span>
+                            <span class="prompt-line">   - Mots-clés MESH optimisés</span>
+                            <span class="prompt-line">   - Bases de données multiples</span>
+                            <span class="prompt-line">   - Critères inclusion/exclusion stricts</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">2. ÉVALUATION QUALITÉ</span>
+                            <span class="prompt-line">   - Risk of bias assessment (RoB 2.0)</span>
+                            <span class="prompt-line">   - GRADE evidence evaluation</span>
+                            <span class="prompt-line">   - Sensitivity analysis</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">3. ANALYSE STATISTIQUE</span>
+                            <span class="prompt-line">   - Random-effects modeling</span>
+                            <span class="prompt-line">   - Heterogeneity assessment (I²)</span>
+                            <span class="prompt-line">   - Publication bias detection</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">4. INTERPRÉTATION CRITIQUE</span>
+                            <span class="prompt-line">   - Clinical significance vs statistical</span>
+                            <span class="prompt-line">   - Limitations et biais potentiels</span>
+                            <span class="prompt-line">   - Implications pour pratique/politique</span>
+                        </div>
+                    </div>
+
+                    <h4>Génération d'Hypothèses Innovantes</h4>
+                    <div class="terminal-block">
+                        <div class="terminal-content">
+                            <span class="prompt-line">Mode: Creative Research Scientist + Contrarian Thinker</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">Défi: Générer 10 hypothèses contre-intuitives sur [PHÉNOMÈNE]</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">MÉTHODOLOGIE CRÉATIVE:</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">🔄 INVERSION SYSTÉMATIQUE:</span>
+                            <span class="prompt-line">Pour chaque "vérité" établie, explore son opposé</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">🔗 CROSS-POLLINATION:</span>
+                            <span class="prompt-line">Importe des principes de domaines non-reliés :</span>
+                            <span class="prompt-line">- Physique quantique → Psychologie sociale</span>
+                            <span class="prompt-line">- Écologie → Économie comportementale</span>
+                            <span class="prompt-line">- Théorie des jeux → Neurobiologie</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">🎲 RANDOM STIMULI:</span>
+                            <span class="prompt-line">Utilise des déclencheurs aléatoires pour rompre</span>
+                            <span class="prompt-line">les patterns de pensée habituels</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">🕳️ EDGE CASES:</span>
+                            <span class="prompt-line">Focus sur les outliers et anomalies ignorées</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">Pour chaque hypothèse, fournis :</span>
+                            <span class="prompt-line">- Raisonnement théorique</span>
+                            <span class="prompt-line">- Expérience de validation possible</span>
+                            <span class="prompt-line">- Impact potentiel si validée</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="creative-2025" class="tab-content">
+                    <h3>Applications Créatives Avancées</h3>
+                    
+                    <h4>Narration Transmedia Complexe</h4>
+                    <div class="terminal-block">
+                        <div class="terminal-content">
+                            <span class="prompt-line">Persona: Showrunner Emmy-award avec expertise transmedia</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">Projet: Univers narratif multi-plateforme</span>
+                            <span class="prompt-line">Genre: [Sci-fi/Thriller/Drama] hybride</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">ARCHITECTURE NARRATIVE:</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">📺 SÉRIE PRINCIPALE (8 épisodes):</span>
+                            <span class="prompt-line">- Arc narratif central</span>
+                            <span class="prompt-line">- Personnages principaux</span>
+                            <span class="prompt-line">- Timeline principale</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">📱 CONTENU DIGITAL NATIF:</span>
+                            <span class="prompt-line">- Instagram stories des personnages</span>
+                            <span class="prompt-line">- TikToks "behind the scenes" in-universe</span>
+                            <span class="prompt-line">- Podcasts d'investigation fictifs</span>
+                            <span class="prompt-line">- ARG (Alternate Reality Game) elements</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">🎮 EXPÉRIENCE INTERACTIVE:</span>
+                            <span class="prompt-line">- VR experiences clés</span>
+                            <span class="prompt-line">- Choix narratifs via app dédiée</span>
+                            <span class="prompt-line">- Community-driven mysteries</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">📚 EXTENSIONS LITTÉRAIRES:</span>
+                            <span class="prompt-line">- Nouvelles préquelles</span>
+                            <span class="prompt-line">- Documents "découverts" par les fans</span>
+                            <span class="prompt-line">- Guides universe officiels</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">COHÉRENCE NARRATIVE:</span>
+                            <span class="prompt-line">- Bible universe exhaustive</span>
+                            <span class="prompt-line">- Timeline synchronisée multi-plateforme</span>
+                            <span class="prompt-line">- Continuité émotionnelle entre médias</span>
+                            <span class="prompt-line">- Easter eggs cross-platform subtils</span>
+                        </div>
+                    </div>
+
+                    <h4>Design Thinking IA-Amplifié</h4>
+                    <div class="terminal-block">
+                        <div class="terminal-content">
+                            <span class="prompt-line">Mode: Design Innovation Strategist (IDEO + Stanford d.school)</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">Challenge: Réinventer [PRODUIT/SERVICE] pour Gen Alpha</span>
+                            <span class="prompt-line">Contraintes: Durabilité + Inclusion + Tech-native</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">PROCESS DESIGN THINKING 2025:</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">🔍 HYPER-EMPATHIZE:</span>
+                            <span class="prompt-line">- Immersion ethnographique virtuelle</span>
+                            <span class="prompt-line">- Sentiment analysis des communautés en ligne</span>
+                            <span class="prompt-line">- Micro-moments journey mapping</span>
+                            <span class="prompt-line">- Neurofeedback preferences analysis</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">🎯 PROBLEM REFRAMING:</span>
+                            <span class="prompt-line">- "How Might We" divergence (50+ questions)</span>
+                            <span class="prompt-line">- Jobs-to-be-Done deconstruction</span>
+                            <span class="prompt-line">- Systemic design lens application</span>
+                            <span class="prompt-line">- Future-back problem definition</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">💡 QUANTUM IDEATION:</span>
+                            <span class="prompt-line">- Biomimicry inspiration</span>
+                            <span class="prompt-line">- Sci-fi prototyping</span>
+                            <span class="prompt-line">- Constraint removal exercises</span>
+                            <span class="prompt-line">- Anti-solution brainstorming</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">🛠️ RAPID PROTOTYPING:</span>
+                            <span class="prompt-line">- Digital twin simulations</span>
+                            <span class="prompt-line">- Behavioral prototype testing</span>
+                            <span class="prompt-line">- Sustainability impact modeling</span>
+                            <span class="prompt-line">- Accessibility stress testing</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">🧪 EXTREME TESTING:</span>
+                            <span class="prompt-line">- Edge case user scenarios</span>
+                            <span class="prompt-line">- Cultural adaptation requirements</span>
+                            <span class="prompt-line">- 10-year evolution pathway</span>
+                            <span class="prompt-line">- Unintended consequences analysis</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="technical-2025" class="tab-content">
+                    <h3>Applications Techniques Avancées</h3>
+                    
+                    <h4>Architecture Système IA-Native</h4>
+                    <div class="terminal-block">
+                        <div class="terminal-content">
+                            <span class="prompt-line">Persona: Principal Solutions Architect (AWS/Azure/GCP certified)</span>
+                            <span class="prompt-line">Spécialité: IA-Native architectures + MLOps + DevSecOps</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">Mission: Concevoir architecture pour plateforme B2B SaaS</span>
+                            <span class="prompt-line">Scale: 10M users, 99.99% uptime, multi-région</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">ARCHITECTURE MODERNE 2025:</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">🧠 AI-FIRST LAYER:</span>
+                            <span class="prompt-line">- Vector databases (Pinecone/Weaviate)</span>
+                            <span class="prompt-line">- Real-time inference pipelines</span>
+                            <span class="prompt-line">- Federated learning infrastructure</span>
+                            <span class="prompt-line">- Edge AI deployment strategy</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">☁️ CLOUD-NATIVE CORE:</span>
+                            <span class="prompt-line">- Multi-cloud orchestration (K8s + Istio)</span>
+                            <span class="prompt-line">- Event-driven microservices</span>
+                            <span class="prompt-line">- Serverless compute optimization</span>
+                            <span class="prompt-line">- Cost optimization automation</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">🔐 ZERO-TRUST SECURITY:</span>
+                            <span class="prompt-line">- Identity-centric architecture</span>
+                            <span class="prompt-line">- End-to-end encryption (E2EE)</span>
+                            <span class="prompt-line">- Privacy-preserving analytics</span>
+                            <span class="prompt-line">- Compliance automation (SOC2/GDPR)</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">📊 OBSERVABILITY 360°:</span>
+                            <span class="prompt-line">- Distributed tracing (Jaeger)</span>
+                            <span class="prompt-line">- AIOps anomaly detection</span>
+                            <span class="prompt-line">- Predictive scaling algorithms</span>
+                            <span class="prompt-line">- Business metrics correlation</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">LIVRABLES:</span>
+                            <span class="prompt-line">- Architecture Decision Records (ADRs)</span>
+                            <span class="prompt-line">- Technology radar & recommendations</span>
+                            <span class="prompt-line">- Implementation roadmap (18 mois)</span>
+                            <span class="prompt-line">- Risk assessment & mitigation</span>
+                            <span class="prompt-line">- TCO analysis & ROI projections</span>
+                        </div>
+                    </div>
+
+                    <h4>Code Review IA-Assistée</h4>
+                    <div class="terminal-block">
+                        <div class="terminal-content">
+                            <span class="prompt-line">Mode: Senior Staff Engineer + Security Specialist</span>
+                            <span class="prompt-line">Expertise: 15+ ans, expert en [LANGAGE], architecture patterns</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">Mission: Code review exhaustif multi-dimensionnel</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">ANALYSE MULTI-COUCHE:</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">🏗️ ARCHITECTURE & DESIGN:</span>
+                            <span class="prompt-line">- SOLID principles compliance</span>
+                            <span class="prompt-line">- Design patterns appropriateness</span>
+                            <span class="prompt-line">- Separation of concerns</span>
+                            <span class="prompt-line">- Dependency injection best practices</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">⚡ PERFORMANCE & SCALABILITY:</span>
+                            <span class="prompt-line">- Big O complexity analysis</span>
+                            <span class="prompt-line">- Memory usage optimization</span>
+                            <span class="prompt-line">- Database query efficiency</span>
+                            <span class="prompt-line">- Caching strategy evaluation</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">🔒 SECURITY & VULNERABILITIES:</span>
+                            <span class="prompt-line">- OWASP Top 10 compliance</span>
+                            <span class="prompt-line">- Input validation & sanitization</span>
+                            <span class="prompt-line">- Authentication/authorization flows</span>
+                            <span class="prompt-line">- Data encryption & privacy</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">🧪 TESTABILITY & MAINTAINABILITY:</span>
+                            <span class="prompt-line">- Unit test coverage & quality</span>
+                            <span class="prompt-line">- Code readability & documentation</span>
+                            <span class="prompt-line">- Error handling robustness</span>
+                            <span class="prompt-line">- Future extensibility considerations</span>
+                            <span class="prompt-line"></span>
+                            <span class="prompt-line">FEEDBACK FORMAT:</span>
+                            <span class="prompt-line">- Critical issues (MUST fix)</span>
+                            <span class="prompt-line">- Important improvements (SHOULD fix)</span>
+                            <span class="prompt-line">- Style & best practices (COULD improve)</span>
+                            <span class="prompt-line">- Positive highlights (well done)</span>
+                            <span class="prompt-line">- Learning resources & next steps</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Templates Universels 2025</h3>
+            
+            <div class="success-card">
+                <h4>🚀 Mega-Template : Résolution de Problème Complexe</h4>
+                <div class="terminal-block">
+                    <div class="terminal-content">
+                        <span class="prompt-line">class ComplexProblemSolver:</span>
+                        <span class="prompt-line">    """</span>
+                        <span class="prompt-line">    Persona: [EXPERT_ROLE] avec [X] années d'expérience</span>
+                        <span class="prompt-line">    Spécialité: [DOMAIN_EXPERTISE] + [UNIQUE_PERSPECTIVE]</span>
+                        <span class="prompt-line">    </span>
+                        <span class="prompt-line">    PROBLEM: [DETAILED_PROBLEM_DESCRIPTION]</span>
+                        <span class="prompt-line">    CONTEXT: [ENVIRONMENTAL_CONSTRAINTS]</span>
+                        <span class="prompt-line">    STAKEHOLDERS: [KEY_ACTORS_AND_INTERESTS]</span>
+                        <span class="prompt-line">    SUCCESS_CRITERIA: [MEASURABLE_OUTCOMES]</span>
+                        <span class="prompt-line">    </span>
+                        <span class="prompt-line">    METHODOLOGY:</span>
+                        <span class="prompt-line">    1. PROBLEM_DECONSTRUCTION:</span>
+                        <span class="prompt-line">       - Root cause analysis (5 Whys + Fishbone)</span>
+                        <span class="prompt-line">       - Systems thinking perspective</span>
+                        <span class="prompt-line">       - Stakeholder impact mapping</span>
+                        <span class="prompt-line">    </span>
+                        <span class="prompt-line">    2. MULTI_PERSPECTIVE_ANALYSIS:</span>
+                        <span class="prompt-line">       - First principles reasoning</span>
+                        <span class="prompt-line">       - Historical precedent analysis</span>
+                        <span class="prompt-line">       - Cross-industry pattern recognition</span>
+                        <span class="prompt-line">       - Future scenario modeling</span>
+                        <span class="prompt-line">    </span>
+                        <span class="prompt-line">    3. SOLUTION_GENERATION:</span>
+                        <span class="prompt-line">       - Divergent ideation (quantity first)</span>
+                        <span class="prompt-line">       - Convergent evaluation (feasibility matrix)</span>
+                        <span class="prompt-line">       - Risk-adjusted prioritization</span>
+                        <span class="prompt-line">       - Implementation pathway design</span>
+                        <span class="prompt-line">    </span>
+                        <span class="prompt-line">    4. VALIDATION_FRAMEWORK:</span>
+                        <span class="prompt-line">       - Assumption stress testing</span>
+                        <span class="prompt-line">       - Pilot/MVP validation strategy</span>
+                        <span class="prompt-line">       - Success metrics & monitoring</span>
+                        <span class="prompt-line">       - Contingency planning</span>
+                        <span class="prompt-line">    </span>
+                        <span class="prompt-line">    OUTPUT_FORMAT:</span>
+                        <span class="prompt-line">    - Executive Summary (problem + recommendation)</span>
+                        <span class="prompt-line">    - Detailed Analysis & Reasoning</span>
+                        <span class="prompt-line">    - Implementation Roadmap</span>
+                        <span class="prompt-line">    - Risk Assessment & Mitigation</span>
+                        <span class="prompt-line">    - Success Metrics & Monitoring Plan</span>
+                        <span class="prompt-line">    """</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="futur" class="fade-in">
+            <h2>Le Futur du Prompt Engineering</h2>
+            
+            <h3>Tendances Émergentes 2025-2030</h3>
+            
+            <div class="comparison-grid">
+                <div class="comparison-item info-card">
+                    <h4>🧠 Neuro-Prompt Interfaces</h4>
+                    <p>Interfaces cerveau-machine pour prompting direct par pensée, réduisant la barrière linguistique entre intention et instruction.</p>
+                </div>
+                <div class="comparison-item success-card">
+                    <h4>🤖 Autonomous Prompt Evolution</h4>
+                    <p>IA capable d'auto-améliorer ses prompts en temps réel basé sur les résultats et feedback, créant des boucles d'optimisation continue.</p>
+                </div>
+            </div>
+
+            <div class="comparison-grid">
+                <div class="comparison-item warning-card">
+                    <h4>🌐 Prompt Marketplaces</h4>
+                    <p>Économies décentralisées de prompts où experts vendent des frameworks sophistiqués, avec systèmes de réputation et versioning.</p>
+                </div>
+                <div class="comparison-item info-card">
+                    <h4>🔮 Predictive Prompting</h4>
+                    <p>Systèmes prédisant les besoins en prompts avant même que l'utilisateur les formule, basés sur contexte et patterns comportementaux.</p>
+                </div>
+            </div>
+
+            <h3>Révolutions Technologiques Attendues</h3>
+            
+            <div class="terminal-block">
+                <div class="terminal-header-bar">
+                    <div class="terminal-dots">
+                        <div class="terminal-dot red"></div>
+                        <div class="terminal-dot yellow"></div>
+                        <div class="terminal-dot green"></div>
+                    </div>
+                    <div class="terminal-title-bar">future_tech_timeline.md</div>
+                </div>
+                <div class="terminal-content">
+                    <span class="prompt-line">2025-2026: Multimodal Prompting Maturity</span>
+                    <span class="prompt-line">├── Voice + Vision + Text integration native</span>
+                    <span class="prompt-line">├── Real-time environmental context awareness</span>
+                    <span class="prompt-line">└── Gesture-based prompt modification</span>
+                    <span class="prompt-line"></span>
+                    <span class="prompt-line">2026-2027: Quantum-Enhanced Reasoning</span>
+                    <span class="prompt-line">├── Quantum algorithms for complex optimization</span>
+                    <span class="prompt-line">├── Superposition-based parallel processing</span>
+                    <span class="prompt-line">└── Exponential speedup for certain problem classes</span>
+                    <span class="prompt-line"></span>
+                    <span class="prompt-line">2027-2028: Biological Integration</span>
+                    <span class="prompt-line">├── DNA-based information storage for prompts</span>
+                    <span class="prompt-line">├── Neuromorphic computing architectures</span>
+                    <span class="prompt-line">└── Bio-inspired optimization algorithms</span>
+                    <span class="prompt-line"></span>
+                    <span class="prompt-line">2028-2030: Consciousness-Level AI</span>
+                    <span class="prompt-line">├── Self-aware prompt optimization</span>
+                    <span class="prompt-line">├── Emotional intelligence integration</span>
+                    <span class="prompt-line">└── Meta-cognitive reasoning capabilities</span>
+                </div>
+            </div>
+
+            <h3>Préparer l'Avenir : Compétences Clés</h3>
+            
+            <div class="tabs-container">
+                <div class="tabs-nav">
+                    <button class="tab-button active" data-tab="technical-skills">Technique</button>
+                    <button class="tab-button" data-tab="cognitive-skills">Cognitif</button>
+                    <button class="tab-button" data-tab="social-skills">Social</button>
+                    <button class="tab-button" data-tab="meta-skills">Méta-Compétences</button>
+                </div>
+                
+                <div id="technical-skills" class="tab-content active">
+                    <h4>Compétences Techniques Futures</h4>
+                    <ul class="checklist">
+                        <li><strong>Prompt Architecture</strong> : Conception de systèmes de prompts complexes et inter-connectés</li>
+                        <li><strong>AI Model Understanding</strong> : Compréhension profonde des architectures et limitations des modèles</li>
+                        <li><strong>Multimodal Integration</strong> : Maîtrise des prompts cross-modaux (texte/image/audio/vidéo)</li>
+                        <li><strong>Optimization Theory</strong> : Algorithmes d'optimisation pour prompt tuning automatisé</li>
+                        <li><strong>Security & Privacy</strong> : Techniques avancées de protection et d'anonymisation</li>
+                        <li><strong>Performance Monitoring</strong> : Métriques et analytics pour mesurer l'efficacité des prompts</li>
+                    </ul>
+                </div>
+                
+                <div id="cognitive-skills" class="tab-content">
+                    <h4>Compétences Cognitives Avancées</h4>
+                    <ul class="checklist">
+                        <li><strong>Systems Thinking</strong> : Vision holistique des interactions complexes</li>
+                        <li><strong>Meta-Cognition</strong> : Capacité à raisonner sur ses propres processus de pensée</li>
+                        <li><strong>Pattern Recognition</strong> : Identification de patterns subtils dans les données et comportements</li>
+                        <li><strong>Analogical Reasoning</strong> : Transfert de connaissances entre domaines différents</li>
+                        <li><strong>Probabilistic Thinking</strong> : Raisonnement sous incertitude et gestion des probabilités</li>
+                        <li><strong>Temporal Reasoning</strong> : Intégration sophisticated des dimensions temporelles</li>
+                    </ul>
+                </div>
+                
+                <div id="social-skills" class="tab-content">
+                    <h4>Compétences Sociales & Éthiques</h4>
+                    <ul class="checklist">
+                        <li><strong>AI Ethics</strong> : Navigation des enjeux éthiques complexes liés à l'IA</li>
+                        <li><strong>Stakeholder Management</strong> : Gestion des intérêts multiples et parfois conflictuels</li>
+                        <li><strong>Cultural Intelligence</strong> : Adaptation des prompts aux contextes culturels divers</li>
+                        <li><strong>Communication</strong> : Translation entre expertises techniques et besoins business</li>
+                        <li><strong>Change Management</strong> : Accompagnement des transformations organisationnelles</li>
+                        <li><strong>Collaborative AI</strong> : Travail efficace en équipe humain-IA</li>
+                    </ul>
+                </div>
+                
+                <div id="meta-skills" class="tab-content">
+                    <h4>Méta-Compétences Transcendantes</h4>
+                    <ul class="checklist">
+                        <li><strong>Learning How to Learn</strong> : Adaptation continue aux évolutions technologiques rapides</li>
+                        <li><strong>Uncertainty Navigation</strong> : Confort avec l'ambiguïté et l'inconnu</li>
+                        <li><strong>Creativity Amplification</strong> : Utilisation de l'IA pour démultiplier la créativité humaine</li>
+                        <li><strong>Strategic Foresight</strong> : Anticipation des conséquences long-terme des décisions</li>
+                        <li><strong>Resilience Building</strong> : Construction de systèmes robustes face aux changements</li>
+                        <li><strong>Wisdom Integration</strong> : Synthèse de connaissances en insights actionnables</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Recommandations pour Rester à la Pointe</h3>
+            
+            <div class="info-card">
+                <h4>🎯 Stratégie de Développement Continu</h4>
+                <div class="terminal-block">
+                    <div class="terminal-content">
+                        <span class="prompt-line">## Plan de Développement 2025-2030</span>
+                        <span class="prompt-line"></span>
+                        <span class="prompt-line">### Phase 1: Fundamentals (6 mois)</span>
+                        <span class="prompt-line">- Maîtrise parfaite des techniques actuelles</span>
+                        <span class="prompt-line">- Contribution à des projets open source</span>
+                        <span class="prompt-line">- Publication d'articles et case studies</span>
+                        <span class="prompt-line"></span>
+                        <span class="prompt-line">### Phase 2: Specialization (12 mois)</span>
+                        <span class="prompt-line">- Focus sur 2-3 domaines de spécialisation</span>
+                        <span class="prompt-line">- Développement d'expertise verticale</span>
+                        <span class="prompt-line">- Networking avec leaders du domaine</span>
+                        <span class="prompt-line"></span>
+                        <span class="prompt-line">### Phase 3: Innovation (18 mois)</span>
+                        <span class="prompt-line">- Recherche et développement de nouvelles techniques</span>
+                        <span class="prompt-line">- Collaboration avec laboratoires de recherche</span>
+                        <span class="prompt-line">- Mentoring de la prochaine génération</span>
+                        <span class="prompt-line"></span>
+                        <span class="prompt-line">### Phase 4: Leadership (Ongoing)</span>
+                        <span class="prompt-line">- Influence sur les standards industriels</span>
+                        <span class="prompt-line">- Shaping de l'éthique et des politiques</span>
+                        <span class="prompt-line">- Legacy building pour l'écosystème IA</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-card">
+                <h4>🌟 Appel à l'Action</h4>
+                <p>Le prompt engineering de 2025 n'est plus une simple compétence technique, mais une nouvelle forme de littératie numérique essentielle. Que vous soyez débutant ou expert, l'important est de commencer dès maintenant et d'itérer continuellement.</p>
+                
+                <p><strong>Votre premier défi :</strong> Choisissez un problème réel dans votre domaine et appliquez au moins 3 techniques avancées de ce guide. Documentez votre processus, partagez vos résultats, et contribuez à l'évolution collective de notre compréhension.</p>
+                
+                <p><em>L'avenir appartient à ceux qui sauront orchestrer l'intelligence artificielle au service de l'intelligence humaine. Soyez de ceux-là.</em></p>
+            </div>
+        </section>
+
+        <footer>
+            <div class="container">
+                <p><strong>PromptCraft 2025</strong> | Guide Complet du Prompt Engineering</p>
+                <p>Dernière mise à jour : Juin 2025 | Optimisé pour Claude 4, GPT-5, et modèles émergents</p>
+                <p class="version-badge">Une ressource vivante qui évolue avec l'IA</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Enhanced JavaScript functionality for 2025
+        
+        // Smooth scrolling with modern browser API
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        // Intersection Observer for fade-in animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Advanced tab functionality with state management
+        class TabManager {
+            constructor() {
+                this.activeTab = new Map();
+                this.initializeTabs();
+            }
+
+            initializeTabs() {
+                document.querySelectorAll('.tabs-container').forEach((container, index) => {
+                    const tabButtons = container.querySelectorAll('.tab-button');
+                    const tabContents = container.querySelectorAll('.tab-content');
+                    
+                    tabButtons.forEach(button => {
+                        button.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            this.switchTab(container, button.dataset.tab);
+                        });
+                    });
+                    
+                    // Initialize first tab as active
+                    if (tabButtons.length > 0) {
+                        this.activeTab.set(container, tabButtons[0].dataset.tab);
+                    }
+                });
+            }
+
+            switchTab(container, tabId) {
+                const tabButtons = container.querySelectorAll('.tab-button');
+                const tabContents = container.querySelectorAll('.tab-content');
+                
+                // Remove active class from all
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Add active class to selected
+                container.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+                container.querySelector(`#${tabId}`)?.classList.add('active');
+                
+                // Update state
+                this.activeTab.set(container, tabId);
+                
+                // Smooth transition effect
+                const activeContent = container.querySelector(`#${tabId}`);
+                if (activeContent) {
+                    activeContent.style.opacity = '0';
+                    activeContent.style.transform = 'translateY(20px)';
+                    
+                    requestAnimationFrame(() => {
+                        activeContent.style.transition = 'all 0.3s ease';
+                        activeContent.style.opacity = '1';
+                        activeContent.style.transform = 'translateY(0)';
+                    });
+                }
+            }
+        }
+
+        // Enhanced navigation with progress tracking
+        class NavigationManager {
+            constructor() {
+                this.sections = document.querySelectorAll('section[id]');
+                this.navLinks = document.querySelectorAll('nav a[href^="#"]');
+                this.progressBar = this.createProgressBar();
+                this.initializeNavigation();
+                this.trackProgress();
+            }
+
+            createProgressBar() {
+                const progressContainer = document.createElement('div');
+                progressContainer.className = 'progress-bar';
+                progressContainer.style.position = 'fixed';
+                progressContainer.style.top = '0';
+                progressContainer.style.left = '0';
+                progressContainer.style.right = '0';
+                progressContainer.style.zIndex = '1000';
+                
+                const progressFill = document.createElement('div');
+                progressFill.className = 'progress-fill';
+                progressFill.style.width = '0%';
+                
+                progressContainer.appendChild(progressFill);
+                document.body.prepend(progressContainer);
+                
+                return progressFill;
+            }
+
+            initializeNavigation() {
+                this.navLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const targetId = link.getAttribute('href').substring(1);
+                        const targetSection = document.getElementById(targetId);
+                        
+                        if (targetSection) {
+                            const offsetTop = targetSection.offsetTop - 100;
+                            window.scrollTo({
+                                top: offsetTop,
+                                behavior: 'smooth'
+                            });
+                        }
+                    });
+                });
+            }
+
+            trackProgress() {
+                window.addEventListener('scroll', () => {
+                    const scrollTop = window.pageYOffset;
+                    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                    const scrollPercent = (scrollTop / docHeight) * 100;
+                    
+                    this.progressBar.style.width = Math.min(scrollPercent, 100) + '%';
+                    
+                    // Update active navigation
+                    this.updateActiveNav();
+                });
+            }
+
+            updateActiveNav() {
+                const scrollPosition = window.scrollY + 150;
+                
+                this.sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+                    const sectionId = section.getAttribute('id');
+                    
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                        this.navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${sectionId}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }
+        }
+
+        // Interactive demo functionality
+        class InteractiveDemo {
+            constructor() {
+                this.demos = document.querySelectorAll('.interactive-demo');
+                this.initializeDemos();
+            }
+
+            initializeDemos() {
+                this.demos.forEach(demo => {
+                    const input = demo.querySelector('.demo-input');
+                    const button = demo.querySelector('.demo-button');
+                    const output = demo.querySelector('.demo-output') || this.createOutput(demo);
+                    
+                    if (button) {
+                        button.addEventListener('click', () => {
+                            this.processDemo(input, output);
+                        });
+                    }
+                    
+                    if (input) {
+                        input.addEventListener('keydown', (e) => {
+                            if (e.ctrlKey && e.key === 'Enter') {
+                                this.processDemo(input, output);
+                            }
+                        });
+                    }
+                });
+            }
+
+            createOutput(demo) {
+                const output = document.createElement('div');
+                output.className = 'demo-output';
+                output.style.marginTop = '15px';
+                output.style.padding = '15px';
+                output.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+                output.style.borderRadius = '8px';
+                output.style.fontFamily = "'JetBrains Mono', monospace";
+                demo.appendChild(output);
+                return output;
+            }
+
+            processDemo(input, output) {
+                const value = input.value.trim();
+                if (!value) return;
+                
+                // Simulate processing with typing animation
+                output.innerHTML = '<span style="color: var(--neon-green);">Processing...</span>';
+                
+                setTimeout(() => {
+                    const analysis = this.analyzePrompt(value);
+                    this.typeWriter(output, analysis, 50);
+                }, 1000);
+            }
+
+            analyzePrompt(prompt) {
+                // Simple prompt analysis for demonstration
+                const wordCount = prompt.split(' ').length;
+                const hasPersona = /en tant que|as a|persona|expert/i.test(prompt);
+                const hasContext = /contexte|context|situation/i.test(prompt);
+                const hasFormat = /format|structure|présente/i.test(prompt);
+                const hasConstraints = /contrainte|limite|évite|jamais/i.test(prompt);
+                
+                let score = 0;
+                let feedback = [];
+                
+                if (wordCount > 10) { score += 20; } else { feedback.push("❌ Prompt trop court"); }
+                if (hasPersona) { score += 25; feedback.push("✅ Persona définie"); } else { feedback.push("❌ Manque de persona"); }
+                if (hasContext) { score += 25; feedback.push("✅ Contexte fourni"); } else { feedback.push("❌ Contexte manquant"); }
+                if (hasFormat) { score += 15; feedback.push("✅ Format spécifié"); } else { feedback.push("⚠️ Format à préciser"); }
+                if (hasConstraints) { score += 15; feedback.push("✅ Contraintes définies"); } else { feedback.push("⚠️ Contraintes recommandées"); }
+                
+                return `
+ANALYSE PROMPT (Score: ${score}/100)
+
+${feedback.join('\n')}
+
+RECOMMANDATIONS:
+${score < 50 ? '🔴 Prompt nécessite des améliorations majeures' : 
+  score < 75 ? '🟡 Prompt correct mais peut être optimisé' : 
+  '🟢 Excellent prompt, bien structuré'}
+
+ÉLÉMENTS DÉTECTÉS:
+- Longueur: ${wordCount} mots
+- Complexité: ${wordCount > 50 ? 'Élevée' : wordCount > 20 ? 'Moyenne' : 'Faible'}
+- Structure: ${hasPersona && hasContext ? 'Bien structuré' : 'À améliorer'}
+                `;
+            }
+
+            typeWriter(element, text, speed = 50) {
+                element.innerHTML = '';
+                let i = 0;
+                const timer = setInterval(() => {
+                    if (i < text.length) {
+                        element.innerHTML += text.charAt(i);
+                        i++;
+                    } else {
+                        clearInterval(timer);
+                    }
+                }, speed);
+            }
+        }
+
+        // Accessibility enhancements
+        class AccessibilityManager {
+            constructor() {
+                this.initializeAccessibility();
+            }
+
+            initializeAccessibility() {
+                // Keyboard navigation for tabs
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Tab') {
+                        document.body.classList.add('keyboard-navigation');
+                    }
+                });
+
+                document.addEventListener('mousedown', () => {
+                    document.body.classList.remove('keyboard-navigation');
+                });
+
+                // High contrast toggle
+                this.addHighContrastToggle();
+                
+                // Font size controls
+                this.addFontSizeControls();
+            }
+
+            addHighContrastToggle() {
+                const toggle = document.createElement('button');
+                toggle.innerHTML = '🌓';
+                toggle.title = 'Basculer le contraste élevé';
+                toggle.style.position = 'fixed';
+                toggle.style.top = '20px';
+                toggle.style.right = '20px';
+                toggle.style.zIndex = '1000';
+                toggle.style.background = 'var(--card-bg)';
+                toggle.style.border = '1px solid var(--neon-cyan)';
+                toggle.style.color = 'var(--text-primary)';
+                toggle.style.padding = '10px';
+                toggle.style.borderRadius = '50%';
+                toggle.style.cursor = 'pointer';
+                
+                toggle.addEventListener('click', () => {
+                    document.body.classList.toggle('high-contrast');
+                });
+                
+                document.body.appendChild(toggle);
+            }
+
+            addFontSizeControls() {
+                const controls = document.createElement('div');
+                controls.style.position = 'fixed';
+                controls.style.top = '80px';
+                controls.style.right = '20px';
+                controls.style.zIndex = '1000';
+                controls.style.display = 'flex';
+                controls.style.flexDirection = 'column';
+                controls.style.gap = '5px';
+                
+                const increaseBtn = this.createFontButton('+', 'Augmenter la taille du texte', () => {
+                    this.adjustFontSize(1.1);
+                });
+                
+                const decreaseBtn = this.createFontButton('-', 'Diminuer la taille du texte', () => {
+                    this.adjustFontSize(0.9);
+                });
+                
+                const resetBtn = this.createFontButton('↺', 'Réinitialiser la taille du texte', () => {
+                    document.documentElement.style.fontSize = '';
+                });
+                
+                controls.appendChild(increaseBtn);
+                controls.appendChild(decreaseBtn);
+                controls.appendChild(resetBtn);
+                document.body.appendChild(controls);
+            }
+
+            createFontButton(text, title, onClick) {
+                const button = document.createElement('button');
+                button.innerHTML = text;
+                button.title = title;
+                button.style.background = 'var(--card-bg)';
+                button.style.border = '1px solid var(--neon-cyan)';
+                button.style.color = 'var(--text-primary)';
+                button.style.padding = '8px';
+                button.style.borderRadius = '4px';
+                button.style.cursor = 'pointer';
+                button.style.fontSize = '14px';
+                button.addEventListener('click', onClick);
+                return button;
+            }
+
+            adjustFontSize(factor) {
+                const currentSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+                const newSize = Math.max(12, Math.min(24, currentSize * factor));
+                document.documentElement.style.fontSize = newSize + 'px';
+            }
+        }
+
+        // Performance monitoring
+        class PerformanceMonitor {
+            constructor() {
+                this.startTime = performance.now();
+                this.metrics = {};
+                this.initializeMonitoring();
+            }
+
+            initializeMonitoring() {
+                // Page load metrics
+                window.addEventListener('load', () => {
+                    this.metrics.loadTime = performance.now() - this.startTime;
+                    this.logMetric('Page Load Time', this.metrics.loadTime.toFixed(2) + 'ms');
+                });
+
+                // Scroll performance
+                let scrollTimer = null;
+                window.addEventListener('scroll', () => {
+                    if (!scrollTimer) {
+                        scrollTimer = setTimeout(() => {
+                            this.logMetric('Scroll Event', 'Processed');
+                            scrollTimer = null;
+                        }, 100);
+                    }
+                });
+
+                // Error tracking
+                window.addEventListener('error', (e) => {
+                    this.logMetric('JavaScript Error', e.message);
+                });
+            }
+
+            logMetric(name, value) {
+                if (window.console && console.log) {
+                    console.log(`[PromptCraft] ${name}: ${value}`);
+                }
+            }
+        }
+
+        // Initialize all managers when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            new TabManager();
+            new NavigationManager();
+            new InteractiveDemo();
+            new AccessibilityManager();
+            new PerformanceMonitor();
+            
+            // Add some interactive elements
+            addCopyCodeFunctionality();
+            addScrollToTopButton();
+        });
+
+        // Copy code functionality
+        function addCopyCodeFunctionality() {
+            document.querySelectorAll('.terminal-block').forEach(block => {
+                const copyBtn = document.createElement('button');
+                copyBtn.innerHTML = '📋';
+                copyBtn.title = 'Copier le code';
+                copyBtn.style.position = 'absolute';
+                copyBtn.style.top = '10px';
+                copyBtn.style.right = '10px';
+                copyBtn.style.background = 'transparent';
+                copyBtn.style.border = 'none';
+                copyBtn.style.color = 'var(--text-secondary)';
+                copyBtn.style.cursor = 'pointer';
+                copyBtn.style.fontSize = '16px';
+                copyBtn.style.opacity = '0';
+                copyBtn.style.transition = 'opacity 0.3s';
+                
+                block.style.position = 'relative';
+                block.appendChild(copyBtn);
+                
+                block.addEventListener('mouseenter', () => {
+                    copyBtn.style.opacity = '1';
+                });
+                
+                block.addEventListener('mouseleave', () => {
+                    copyBtn.style.opacity = '0';
+                });
+                
+                copyBtn.addEventListener('click', async () => {
+                    const content = block.querySelector('.terminal-content');
+                    if (content) {
+                        try {
+                            await navigator.clipboard.writeText(content.textContent);
+                            copyBtn.innerHTML = '✅';
+                            setTimeout(() => {
+                                copyBtn.innerHTML = '📋';
+                            }, 2000);
+                        } catch (err) {
+                            console.error('Failed to copy text: ', err);
+                        }
+                    }
+                });
+            });
+        }
+
+        // Scroll to top button
+        function addScrollToTopButton() {
+            const scrollBtn = document.createElement('button');
+            scrollBtn.innerHTML = '↑';
+            scrollBtn.title = 'Retour en haut';
+            scrollBtn.style.position = 'fixed';
+            scrollBtn.style.bottom = '30px';
+            scrollBtn.style.right = '30px';
+            scrollBtn.style.width = '50px';
+            scrollBtn.style.height = '50px';
+            scrollBtn.style.borderRadius = '50%';
+            scrollBtn.style.background = 'var(--accent-gradient)';
+            scrollBtn.style.border = 'none';
+            scrollBtn.style.color = 'white';
+            scrollBtn.style.fontSize = '20px';
+            scrollBtn.style.cursor = 'pointer';
+            scrollBtn.style.opacity = '0';
+            scrollBtn.style.transform = 'translateY(100px)';
+            scrollBtn.style.transition = 'all 0.3s ease';
+            scrollBtn.style.zIndex = '1000';
+            scrollBtn.classList.add('pulse');
+            
+            document.body.appendChild(scrollBtn);
+            
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    scrollBtn.style.opacity = '1';
+                    scrollBtn.style.transform = 'translateY(0)';
+                } else {
+                    scrollBtn.style.opacity = '0';
+                    scrollBtn.style.transform = 'translateY(100px)';
+                }
+            });
+            
+            scrollBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        // Add CSS for high contrast mode
+        const style = document.createElement('style');
+        style.textContent = `
+            .high-contrast {
+                --neon-cyan: #00ffff !important;
+                --neon-purple: #ff00ff !important;
+                --neon-pink: #ffff00 !important;
+                --neon-green: #00ff00 !important;
+                --dark-bg: #000000 !important;
+                --card-bg: #000000 !important;
+                --text-primary: #ffffff !important;
+                --text-secondary: #ffffff !important;
+            }
+            
+            .keyboard-navigation *:focus {
+                outline: 3px solid var(--neon-cyan) !important;
+                outline-offset: 2px !important;
+            }
+            
+            @media (prefers-reduced-motion: reduce) {
+                *, *::before, *::after {
+                    animation-duration: 0.01ms !important;
+                    animation-iteration-count: 1 !important;
+                    transition-duration: 0.01ms !important;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
+                            
